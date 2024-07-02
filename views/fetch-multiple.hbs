@@ -1,0 +1,38 @@
+<!-- views/fetch-multiple.hbs -->
+<div class="container">
+  <h1>{{title}}</h1>
+  <form id="fetch-multiple-form">
+    <div class="form-group">
+      <label for="num">Number of Images:</label>
+      <input type="number" class="form-control" id="num" name="num" min="1" value="1">
+    </div>
+    <button type="submit" class="btn btn-primary">Fetch Images</button>
+  </form>
+  <div id="image-container" class="mt-4 row">
+    <!-- Images will be displayed here -->
+  </div>
+</div>
+
+<script>
+  document.getElementById("fetch-multiple-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const num = document.getElementById("num").value;
+    fetch(`/fetch-multiple?num=${num}`)
+      .then(response => response.json())
+      .then(images => {
+        const imageContainer = document.getElementById("image-container");
+        imageContainer.innerHTML = ""; // Clear previous images
+        images.forEach(image => {
+          const div = document.createElement("div");
+          div.classList.add("col-md-3", "mb-4");
+          const img = document.createElement("img");
+          img.src = `/uploads/${image}`;
+          img.classList.add("img-thumbnail");
+          img.style.width = "100%";
+          div.appendChild(img);
+          imageContainer.appendChild(div);
+        });
+      })
+      .catch(error => console.error("Error fetching images:", error));
+  });
+</script>

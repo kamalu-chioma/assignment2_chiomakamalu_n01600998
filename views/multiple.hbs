@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <form id="fetch-form">
+        <div class="form-group">
+            <label for="num">Number of images to fetch:</label>
+            <input type="number" id="num" name="num" min="1" max="100" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Fetch Images</button>
+    </form>
+    <div id="image-container"></div>
+
+    <!-- Add Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('fetch-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const num = document.getElementById('num').value;
+            fetch(`/fetch-multiple?num=${num}`)
+                .then(response => response.json())
+                .then(images => {
+                    const imageContainer = document.getElementById('image-container');
+                    imageContainer.innerHTML = ''; // Clear previous images
+                    images.forEach(image => {
+                        const img = document.createElement('img');
+                        img.src = `/uploads/${image}`;
+                        img.width = 200; // Set a fixed width for all images
+                        img.style.margin = '10px';
+                        imageContainer.appendChild(img);
+                    });
+                })
+                .catch(error => console.error('Error fetching images:', error));
+        });
+    </script>
+</body>
+</html>

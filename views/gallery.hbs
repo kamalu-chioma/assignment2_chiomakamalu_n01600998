@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <div id="image-container"></div>
+
+    <script>
+        // Fetch all images and display them
+        fetch('/fetch-all')
+            .then(response => response.json())
+            .then(images => {
+                console.log('Images fetched:', images); // Debug log
+                const imageContainer = document.getElementById('image-container');
+                imageContainer.innerHTML = ''; // Clear previous images
+                images.forEach(image => {
+                    const img = document.createElement('img');
+                    img.src = `/uploads/${image}`;
+                    img.alt = image; // Add an alt attribute for accessibility
+                    img.width = 200; // Set a fixed width for all images
+                    img.style.margin = '10px';
+                    imageContainer.appendChild(img);
+                });
+            })
+            .catch(error => console.error('Error fetching images:', error));
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
